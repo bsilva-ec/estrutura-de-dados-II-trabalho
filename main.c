@@ -7,8 +7,10 @@ int main() {
     inicializar(&meuBanco);
     int opcao;
 
+    carregarContas(&meuBanco, "contas.txt");
+
     do {
-        printf("\n\n=== BEM VINDO AO BANCO ===\n");
+        printf("\n\n=== BEM VINDO AO BBC-Bank ===\n");
         printf("1. Criar conta\n");
         printf("2. Realizar deposito\n");
         printf("3. Realizar saque\n");
@@ -57,10 +59,12 @@ typedef struct{
         }
     } while (opcao != 0);
 
+    //Criando o .txt
+    salvarContas(&meuBanco, "contas.txt");
     // Liberando memória antes de sair
     liberarMemoria(&meuBanco);
 
-    return 0
+    return 0;
 }
 <<<<<<< Updated upstream
 =======

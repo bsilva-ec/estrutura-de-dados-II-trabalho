@@ -71,14 +71,6 @@ int buscarConta(const Banco *banco, int numConta) {
     return -1;
 }
 
-int buscarContaPorNome(const Banco *banco, const char *nome) {
-    for (int cont = 0; cont < banco->total; cont++) {
-        if (strcmp(banco->contas[cont].titular, nome) == 0) {
-            return cont;
-        }
-    }
-    return -1;
-}
 
 void liberarMemoria(Banco *banco) {
     if (banco->contas != NULL) {
@@ -219,29 +211,61 @@ void procurarConta(const Banco *banco) {
         return;
     }
 
-    printf("Deseja procurar por:\n");
-    printf("1. Numero da conta\n");
-    printf("2. Nome do titular\n");
-    int escolha = lerInteiro();
-
-    int indice = -1;
-
-    if (escolha == 1) {
-        printf("Digite o numero da conta: ");
-        int numConta = lerInteiro();
-        indice = buscarConta(banco, numConta);
-    } else if (escolha == 2) {
-        char nome[100];
-        printf("Digite o nome do titular: ");
-        lerString(nome, sizeof(nome));
-        indice = buscarContaPorNome(banco, nome);
-    } else {
-        printf("Opcao invalida!\n");
-        return;
-    }
+    printf("Digite o numero da conta: ");
+    int numConta = lerInteiro();
+    int indice = buscarConta(banco, numConta);
 
     if (indice == -1) {
         printf("Conta nao encontrada!\n");
     } else {
         printf("\n=== Dados da Conta ===\n");
         printf("Titular: %s\n", banco->contas[indice].titular);
+        printf("Numero da conta: %d\n", banco->contas[indice].numero);
+        printf("Saldo: R$ %.2f\n", banco->contas[indice].saldo);
+        printf("======================\n");
+    }
+}
+
+void salvarContas(const Banco *banco, const char *nomeArquivo) {
+    FILE *arquivo = fopen(nomeArquivo, "w");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir arquivo para salvar!\n");
+        return;
+    }
+
+    fprintf(arquivo, "%d\n", banco->total);
+
+    for (int i = 0; i < banco->total; i++){
+        fprintf(arquivo, "%d;%s;%.2f\n",
+                banco->contas[i].numero,
+                banco->contas[i].titular,
+                banco->contas[i].saldo);
+    }
+    fclose(arquivo);
+    printf("Contas salvas em '%s'.\n", nomeArquivo);
+}
+
+void carregarContas(Banco *banco, const char *nomeArquivo){
+    FILE *arquivo = fopen(nomeArquivo, "r");
+    if (arquivo == NULL){
+        printf("Nenhum arquivo encontrado, iniciando banco vazio.\n");
+        return;
+    }
+    banco->total=0;
+    int total;
+    fscanf(arquivo, "%d\n", &total);
+    for (int i = 0; i < total; i++) {
+    Conta novaConta;
+    fscanf(arquivo, "%d;%99[^;];%f\n",
+           &novaConta.numero,
+           novaConta.titular,
+           &novaConta.saldo);
+
+    if (banco->total >= banco->capacidade) {
+        expandirQuantidadeConta(banco);
+    }
+    banco->contas[banco->total++] = novaConta;
+}
+    fclose(arquivo);
+    printf("Contas carregadas de '%s'.\n", nomeArquivo);
+}
