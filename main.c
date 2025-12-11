@@ -10,7 +10,7 @@ int main() {
     carregarContas(&meuBanco, "contas.txt");
 
     do {
-        printf("\n\n=== BEM VINDO AO BBC-Bank ===\n");
+        printf("\n\n=== BEM VINDO AO BCB-Bank ===\n");
         printf("1. Criar conta\n");
         printf("2. Realizar deposito\n");
         printf("3. Realizar saque\n");
