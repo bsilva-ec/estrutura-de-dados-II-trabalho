@@ -1,0 +1,4 @@
+3
+56789;Luan Eduardo Lopes;500.00
+98765;Lordon Luis Lopes;20300.00
+7751;Barbara Lopes;950100.00
