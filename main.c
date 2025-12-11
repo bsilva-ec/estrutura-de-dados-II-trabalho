@@ -1,98 +1,53 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define CAPACIDADE 2
+#include "banco.h"
 
-typedef struct{
-    char titular[100];
-    int numero;
-    float saldo;
-}Conta;
+int main() {
+    Banco meuBanco;
+    inicializar(&meuBanco);
+    int opcao;
 
-typedef struct{
-    int total;
-    Conta *contas;
-    int capacidade;
-    
-}Banco;
+    carregarContas(&meuBanco, "contas.txt");
 
-void limpaBuffer(){
-    int buffer;
-    while ((buffer=getchar()) != '\n'){}
-}
+    do {
+        printf("\n\n=== BEM VINDO AO BBC-Bank ===\n");
+        printf("1. Criar conta\n");
+        printf("2. Realizar deposito\n");
+        printf("3. Realizar saque\n");
+        printf("4. Listar contas cadastradas\n");
+        printf("5. Procurar Conta\n");
+        printf("0. Sair\n");
+        printf("Escolha uma opcao: ");
 
-int lerInteiro(){
-    int valor;
-    while(1){
-        if(scanf("%d", &valor) == 1){
-        limpaBuffer();
-        return valor;
-        }else{
-        printf("valor invalido, tente novamente.");
-        limpaBuffer();
+        opcao = lerInteiro();
+
+        switch (opcao) {
+            case 1:
+                criarConta(&meuBanco);
+                break;
+            case 2:
+                realizarDeposito(&meuBanco);
+                break;
+            case 3:
+                realizarSaque(&meuBanco);
+                break;
+            case 4:
+                exibirListaConta(&meuBanco);
+                break;
+            case 5:
+                procurarConta(&meuBanco);
+                break;
+            case 0:
+                printf("Encerrando o banco...\n");
+                break;
+            default:
+                printf("Opcao invalida! Tente novamente.\n");
         }
-    }
-}
+    } while (opcao != 0);
 
-float lerFloat(){
-    float valor;
-    while(1){
-        if(scanf("%f", &valor) == 1){
-            limpaBuffer();
-            return valor;
-        }else{
-            printf("valor invalido, tente novamente.");
-            limpaBuffer();
-        }
-    }
-}
+    //Criando o .txt
+    salvarContas(&meuBanco, "contas.txt");
+    // Liberando memória antes de sair
+    liberarMemoria(&meuBanco);
 
-void lerString(char *texto, int tamanho){
-    scanf(" %[^\n]", texto);
-    limpaBuffer();
-    texto[tamanho - 1] = '\0';
-}
-
-void inicializar(Banco *banco){
-    (*banco).contas = (Conta*) malloc ( CAPACIDADE * sizeof(Conta));
-    
-    if((*banco).contas == NULL){
-        printf("erro ao alocar memoria");
-    }
-    
-    (*banco).total = 0;
-    (*banco).capacidade = CAPACIDADE;
-    
-}
-
-int main()
-{
-   
-    
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
