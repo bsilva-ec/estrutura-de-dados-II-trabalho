@@ -24,7 +24,6 @@ void lerString(char *texto, int tamanho);
 void inicializar(Banco *banco);
 void expandirQuantidadeConta(Banco *banco);
 int buscarConta(const Banco *banco, int numConta);
-int buscarContaPorNome(const Banco *banco, const char *nome);
 void liberarMemoria(Banco *banco);
 
 void criarConta(Banco *banco);
@@ -32,5 +31,8 @@ void realizarSaque(Banco *banco);
 void realizarDeposito(Banco *banco);
 void exibirListaConta(const Banco *banco);
 void procurarConta(const Banco *banco);
+void salvarContas(const Banco *banco, const char *nomeArquivo);
+void carregarContas(Banco *banco, const char *nomeArquivo);
+
 
 #endif
